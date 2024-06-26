@@ -10,6 +10,8 @@ import { SendGridServiceService } from './infrastructure/send-grid-service/send-
 import { SendGridEmailModuleModule } from './infrastructure/controllers/send-grid-email-module/send-grid-email-module.module';
 import { TaskEntity } from './infrastructure/Entity/taskEntity';
 import { TaskUserEntity } from './infrastructure/Entity/taskUserEntity';
+import { TaskUserModule } from './infrastructure/controllers/task-user/task-user.module';
+import { TaskUserService } from './infrastructure/repository/task-user/task-user.service';
 
 @Module({
   imports: [
@@ -29,8 +31,9 @@ import { TaskUserEntity } from './infrastructure/Entity/taskUserEntity';
     RolModule,
     TaskModule,
     SendGridEmailModuleModule,
+    TaskUserModule,
   ],
   controllers: [],
-  providers: [SendGridServiceService],
+  providers: [SendGridServiceService, TaskUserService],
 })
 export class AppModule {}
