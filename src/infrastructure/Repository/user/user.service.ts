@@ -87,16 +87,19 @@ export class UserService implements UserRepository {
     await this.repository.delete(id.value);
   }
 
-  async login(email: UserEmail, password: Password): Promise<User | string> {
+  async login(email: UserEmail, password: Password): Promise<User | object> {
+    console.log(email,password," que pedoxd");
     const user = await this.repository.findOne({
       where: { email: email.value, password: password.value },
       relations: ['rol'],
     });
+    console.log(user);
     if (!user) return null;
     const payload = { sub: user.id, name: user.name, rol: user.rol.rol };
-    const { access_token } = {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    const access_token = { access_token: await this.jwtService.signAsync(payload) }
+    // const { access_token } = {
+    //   access_token: await this.jwtService.signAsync(payload),
+    // };
     return access_token;
   }
 }

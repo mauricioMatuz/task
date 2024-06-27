@@ -4,7 +4,7 @@ import { Password } from 'src/domain/user/Password';
 export class UserLogin {
   constructor(private repository: UserRepository) {}
 
-  async run(email: string, password: string): Promise<User | string> {
+  async run(email: string, password: string): Promise<User | object> {
     const user = await this.repository.login(
       new UserEmail(email),
       new Password(password),

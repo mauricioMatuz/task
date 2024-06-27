@@ -10,5 +10,5 @@ export interface UserRepository {
   getOneById(id: UserId): Promise<User | null>;
   edit(user: User): Promise<UserEntity>;
   delete(user: UserId): Promise<void>;
-  login(email:UserEmail, password: Password): Promise<User | string>;
+  login(email:UserEmail, password: Password): Promise<User | object>;
 }

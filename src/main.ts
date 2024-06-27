@@ -5,7 +5,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
+  app.enableCors({
+    origin: 'http://localhost:4200',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  });
   ConfigModule.forRoot({ isGlobal: true }),
     app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
