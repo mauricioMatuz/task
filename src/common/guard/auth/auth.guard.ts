@@ -22,9 +22,7 @@
         const payload = await this.jwtService.verifyAsync(token, {
           secret: process.env.SECRET,
         });
-        console.log(payload);
         request['user'] = payload;
-        console.log(request['user']);
       } catch (error) {
         throw new UnauthorizedException();
       }

@@ -4,6 +4,7 @@ import { TaskTitle } from './TaskTitle';
 import { TaskUser } from './TaskUser';
 import { TaskUserId } from './TaskUserId';
 import { TaskDescription } from './Tastdescripción';
+import { ItemEntiyTask } from './ItemEntityUser';
 
 export class Task {
   title: TaskTitle;
@@ -12,6 +13,7 @@ export class Task {
   createdAt: TaskCreatedAt;
   userId: TaskUserId;
   user: TaskUser;
+  item: ItemEntiyTask[];
   constructor(
     title: TaskTitle,
     description: TaskDescription,
@@ -19,6 +21,7 @@ export class Task {
     userId: TaskUserId,
     user: TaskUser,
     id?: TaskId,
+    item?: ItemEntiyTask[],
   ) {
     this.title = title;
     this.description = description;
@@ -26,6 +29,7 @@ export class Task {
     this.userId = userId;
     this.user = user;
     this.id = id || null;
+    this.item = item || null;
   }
 
   public toPlainObject() {
@@ -34,6 +38,7 @@ export class Task {
       title: this.title.value,
       description: this.description.value,
       user: this.user.value,
+      item: this.item,
       createAt: this.createdAt.value,
     };
   }

@@ -13,11 +13,15 @@ import { UserEntity } from 'src/infrastructure/Entity/userEntity';
 import { RolEntityUser } from 'src/domain/user/RolEntity';
 import { Password } from 'src/domain/user/Password';
 import { JwtService } from '@nestjs/jwt';
+import { RolEntity } from 'src/infrastructure/Entity/rolEntity';
+import { NotFoundException } from '@nestjs/common';
 
 export class UserService implements UserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly repository: Repository<UserEntity>,
+    @InjectRepository(RolEntity)
+    private readonly rolRepository: Repository<RolEntity>,
     private jwtService: JwtService,
   ) {}
 
@@ -54,6 +58,12 @@ export class UserService implements UserRepository {
   }
 
   async create(user: User): Promise<UserEntity> {
+    const rol = await this.rolRepository.findOne({
+      where: {
+        id: user.rolId.value,
+      },
+    });
+    if (!rol) throw new NotFoundException('Role not exist');
     const test = await this.repository.save({
       name: user.name.value,
       email: user.email.value,

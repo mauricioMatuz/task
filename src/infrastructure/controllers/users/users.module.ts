@@ -13,10 +13,11 @@ import {
 import { UserService } from 'src/infrastructure/Repository/user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
+import { RolEntity } from 'src/infrastructure/Entity/rolEntity';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity, RolEntity]),
     JwtModule.register({
       global: true,
       secret: process.env.SECRET,

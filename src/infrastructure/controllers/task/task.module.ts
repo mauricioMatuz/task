@@ -10,6 +10,8 @@ import {
   TaskGetAll,
   TaskGetOneById,
 } from 'src/app/task';
+import { MyTask } from 'src/app/task/MyTask/MyTask';
+import { MyFinish } from 'src/app/task/MyFinish/MyFinish';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TaskEntity])],
@@ -39,6 +41,16 @@ import {
     {
       provide: 'TaskDelete',
       useFactory: (repository: TaskService) => new TaskDelete(repository),
+      inject: ['TaskRepository'],
+    },
+    {
+      provide: 'MyTask',
+      useFactory: (repository: TaskService) => new MyTask(repository),
+      inject: ['TaskRepository'],
+    },
+    {
+      provide: 'MyTaskFinish',
+      useFactory: (repository: TaskService) => new MyFinish(repository),
       inject: ['TaskRepository'],
     },
     TaskService,

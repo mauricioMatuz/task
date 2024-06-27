@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
   NotFoundException,
   Param,
@@ -15,16 +17,17 @@ import {
   UserDelete,
   UserEdit,
   UserGetAll,
-  UserGetOneById,UserLogin
+  UserGetOneById,
+  UserLogin,
 } from 'src/app/user';
 import { Create, Edit, FindOneParams, Login } from './dto/validation';
 import { UserResponseDto } from './dto/response';
 import { UserEntity } from 'src/infrastructure/Entity/userEntity';
 import { UserNotFoundError } from 'src/domain';
-import { AuthGuard } from './guard/auth/auth.guard';
-import { Roles } from '../rol/decorators/roles.decorator';
-import { Role } from '../rol/enums/role.enum';
-import { RolesGuard } from '../rol/guards/roles.guard';
+import { AuthGuard } from '../../../common/guard/auth/auth.guard';
+import { Role } from '../../../common/enums/role.enum';
+import { RolesGuard } from 'src/common/guard/rol/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('user')
 export class UsersController {
@@ -47,12 +50,16 @@ export class UsersController {
       createdAt: userEntity.createdAt.toISOString(), // o como prefieras formatear la fecha
     };
   }
-  @UseGuards(AuthGuard,RolesGuard)
+
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @Get()
   async users() {
     return (await this.userGetAll.run()).map((user) => user.toPlainObject());
   }
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Get(':id')
   async user(@Param() params: FindOneParams) {
     try {
@@ -63,6 +70,8 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Post()
   async create(@Body() body: Create) {
     try {
@@ -76,9 +85,13 @@ export class UsersController {
       const dto = this.mapToDto(create);
       return dto;
     } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new HttpException('Role not exist', HttpStatus.BAD_REQUEST);
       console.log(error, 'erorcito');
     }
   }
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Put(':id')
   async edit(@Param() param: FindOneParams, @Body() body: Edit) {
     const user = await this.userEdit.run(
@@ -93,6 +106,8 @@ export class UsersController {
     return dto;
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Delete(':id')
   async delete(@Param() params: FindOneParams) {
     return await this.userDelete.run(params.id);

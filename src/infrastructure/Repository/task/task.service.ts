@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  ItemEntiyTask,
   Task,
   TaskCreatedAt,
   TaskDescription,
@@ -19,7 +20,13 @@ export class TaskService implements TaskRepository {
     @InjectRepository(TaskEntity)
     private readonly respository: Repository<TaskEntity>,
   ) {}
+
   private mapToDomain(task: TaskEntity) {
+    const item = task.item ? task.item.map((item)=>new ItemEntiyTask(item)):[]
+    // const items = taskEntity.item
+    //   ? taskEntity.item.map((item) => new Item(item))
+    //   : []; // Verifica si `item` no es nulo y es un array
+
     return new Task(
       new TaskTitle(task.title),
       new TaskDescription(task.description),
@@ -27,6 +34,7 @@ export class TaskService implements TaskRepository {
       new TaskUserId(task.userId),
       new TaskUser(task.user),
       new TaskId(task.id),
+      item
     );
   }
   async create(task: Task): Promise<TaskEntity> {
@@ -38,14 +46,36 @@ export class TaskService implements TaskRepository {
     });
   }
   async getAll(): Promise<Task[]> {
-    const task = await this.respository.find({ relations: ['user'] });
+    const task = await this.respository.find({
+      where: { active: true },
+      relations: ['user'],
+    });
     return task.map((taskEntity) => this.mapToDomain(taskEntity));
   }
   async getOneById(id: TaskId): Promise<Task> {
-    const task = await this.respository.findOne({ where: { id: id.value },relations:['user'] });
+    const task = await this.respository.findOne({
+      where: { id: id.value },
+      relations: ['user'],
+    });
     if (!task) return null;
     return this.mapToDomain(task);
   }
+
+  async getMyTask(id: TaskId): Promise<Task[]> {
+    const task = await this.respository.find({
+      where: { userId: id.value, active: true },
+    });
+    return task.map((taskEntity) => this.mapToDomain(taskEntity));
+  }
+
+  async getFinishTask(id: TaskId): Promise<Task[]> {
+    const task = await this.respository.find({
+      where: { userId: id.value, active: false },
+      relations: ['user', 'item'],
+    });
+    return task.map((taskEntity) => this.mapToDomain(taskEntity));
+  }
+
   async edit(task: Task): Promise<TaskEntity> {
     await this.respository.update(task.id.value, {
       title: task.title.value,

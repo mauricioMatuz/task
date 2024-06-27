@@ -11,6 +11,11 @@ import { SendGridEmailModuleModule } from './infrastructure/controllers/send-gri
 import { TaskEntity } from './infrastructure/Entity/taskEntity';
 import { TaskUserEntity } from './infrastructure/Entity/taskUserEntity';
 import { TaskUserModule } from './infrastructure/controllers/task-user/task-user.module';
+import { ItemsModule } from './infrastructure/controllers/items/items.module';
+import { ItemService } from './infrastructure/Repository/items/item.service';
+import { ItemEntity } from './infrastructure/Entity/itemEntity';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -21,15 +26,20 @@ import { TaskUserModule } from './infrastructure/controllers/task-user/task-user
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [UserEntity, RolEntity, TaskEntity, TaskUserEntity],
+      entities: [UserEntity, RolEntity, TaskEntity, ItemEntity],
       synchronize: true,
       dropSchema: false,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname,'..','public'),
+      serveRoot: '/'
     }),
     UsersModule,
     RolModule,
     TaskModule,
     SendGridEmailModuleModule,
     TaskUserModule,
+    ItemsModule,
   ],
   controllers: [],
   providers: [],
