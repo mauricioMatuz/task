@@ -21,6 +21,8 @@ export class UserEntity {
   @Column()
   email: string;
   @Column()
+  password: string;
+  @Column()
   createdAt: Date;
   @Column()
   rolId: number;
@@ -29,11 +31,6 @@ export class UserEntity {
   @JoinColumn({ name: 'rolId' })
   rol: RolEntity;
 
-  @ManyToMany(() => TaskEntity, (task) => task.users)
-  @JoinTable({
-    name: 'user_task',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'task_id', referencedColumnName: 'id' },
-  })
-  tasks: TaskEntity[];
+  @OneToMany(() => TaskEntity, (task) => task.id  )
+  tasks: TaskEntity;
 }

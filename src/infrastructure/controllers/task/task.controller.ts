@@ -1,4 +1,4 @@
-import {
+  import {
   Controller,
   Get,
   Post,
@@ -36,6 +36,8 @@ export class TaskController {
       id: taskEntity.id,
       title: taskEntity.title,
       description: taskEntity.description,
+      userId: taskEntity.userId,
+      user:taskEntity.user,
       createdAt: taskEntity.createdAt.toISOString(),
     };
   }
@@ -58,6 +60,7 @@ export class TaskController {
       body.title,
       body.description,
       new Date(),
+      body.userId,
     );
     return this.mapToDto(create);
   }
@@ -68,6 +71,8 @@ export class TaskController {
       body.title,
       body.description,
       new Date(),
+      body.userId,
+      body.user
     );
     return this.mapToDto(put);
   }

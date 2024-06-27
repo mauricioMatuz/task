@@ -12,8 +12,15 @@ export class Create {
   email: string;
   @IsNumber()
   rolId: number;
-  @IsArray()
-  tareaIds: number[];
+  @IsString()
+  password: string;
+}
+
+export class Login {
+  @IsEmail()
+  email: string;
+  @IsString()
+  password: string;
 }
 
 export class Edit {
@@ -23,6 +30,6 @@ export class Edit {
   email: string;
   @IsNumber()
   rolId: number;
-  @IsArray()
-  taskId: number[];
+  @IsString()
+  password: string;
 }

@@ -11,11 +11,9 @@ import { SendGridEmailModuleModule } from './infrastructure/controllers/send-gri
 import { TaskEntity } from './infrastructure/Entity/taskEntity';
 import { TaskUserEntity } from './infrastructure/Entity/taskUserEntity';
 import { TaskUserModule } from './infrastructure/controllers/task-user/task-user.module';
-import { TaskUserService } from './infrastructure/repository/task-user/task-user.service';
-
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST,
@@ -34,6 +32,6 @@ import { TaskUserService } from './infrastructure/repository/task-user/task-user
     TaskUserModule,
   ],
   controllers: [],
-  providers: [SendGridServiceService, TaskUserService],
+  providers: [],
 })
 export class AppModule {}

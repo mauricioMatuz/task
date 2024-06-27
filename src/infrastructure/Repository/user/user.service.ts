@@ -1,7 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  Rol,
-  RolId,
   RolIdU,
   User,
   UserCreatedAt,
@@ -13,14 +11,14 @@ import {
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/infrastructure/Entity/userEntity';
 import { RolEntityUser } from 'src/domain/user/RolEntity';
-import { MailService } from '@sendgrid/mail';
-import { TaskIdU } from 'src/domain/user/TaskIdU';
-import { TaskEntityUser } from 'src/domain/user/TaskEntityUser';
+import { Password } from 'src/domain/user/Password';
+import { JwtService } from '@nestjs/jwt';
 
 export class UserService implements UserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly repository: Repository<UserEntity>,
+    private jwtService: JwtService,
   ) {}
 
   private mapToDomain(u: UserEntity) {
@@ -29,9 +27,8 @@ export class UserService implements UserRepository {
       new UserEmail(u.email),
       new UserCreatedAt(u.createdAt),
       new RolIdU(u.rolId),
-      // new TaskIdU(u.),
+      new Password(u.password),
       new RolEntityUser(u.rol),
-      // new TaskEntityUser(u.tasks),
       new UserId(u.id),
     );
   }
@@ -48,6 +45,7 @@ export class UserService implements UserRepository {
       where: {
         id: id.value,
       },
+      relations: ['rol'],
     });
 
     if (!user) return null;
@@ -61,10 +59,9 @@ export class UserService implements UserRepository {
       email: user.email.value,
       createdAt: user.createAt.value,
       rolId: user.rolId.value,
-      // taskId: user.taskId.value,
+      password: user.password.value,
     });
-    console.log(test);
-    return test
+    return test;
   }
 
   async edit(user: User): Promise<UserEntity> {
@@ -78,5 +75,18 @@ export class UserService implements UserRepository {
 
   async delete(id: UserId): Promise<void> {
     await this.repository.delete(id.value);
+  }
+
+  async login(email: UserEmail, password: Password): Promise<User | string> {
+    const user = await this.repository.findOne({
+      where: { email: email.value, password: password.value },
+      relations: ['rol'],
+    });
+    if (!user) return null;
+    const payload = { sub: user.id, name: user.name, rol: user.rol.rol };
+    const { access_token } = {
+      access_token: await this.jwtService.signAsync(payload),
+    };
+    return access_token;
   }
 }

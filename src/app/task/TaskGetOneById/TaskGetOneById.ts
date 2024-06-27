@@ -5,7 +5,7 @@ export class TaskGetOneById {
   constructor(private repository: TaskRepository) {}
   async run(id: number): Promise<Task> {
     const task = await this.repository.getOneById(new TaskId(id));
-    if (!task) throw new TaskNotFoundError('Rol not found');
+    if (!task) throw new TaskNotFoundError('Task not found');
 
     return task;
   }

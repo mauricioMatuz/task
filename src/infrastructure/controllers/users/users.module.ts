@@ -8,13 +8,23 @@ import {
   UserEdit,
   UserGetAll,
   UserGetOneById,
+  UserLogin,
 } from 'src/app/user';
 import { UserService } from 'src/infrastructure/Repository/user/user.service';
-import { TaskService } from 'src/infrastructure/repository/task/task.service';
-import { TaskEntity } from 'src/infrastructure/Entity/taskEntity';
-
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity,TaskEntity])],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forFeature([UserEntity]),
+    JwtModule.register({
+      global: true,
+      secret: process.env.SECRET,
+      signOptions: {
+        expiresIn: '2h',
+      },
+    }),
+  ],
   controllers: [UsersController],
   providers: [
     { provide: 'UserRepository', useClass: UserService },
@@ -43,7 +53,12 @@ import { TaskEntity } from 'src/infrastructure/Entity/taskEntity';
       useFactory: (repository: UserService) => new UserDelete(repository),
       inject: ['UserRepository'],
     },
-    UserService,TaskService
+    {
+      provide: 'UserLogin',
+      useFactory: (repository: UserService) => new UserLogin(repository),
+      inject: ['UserRepository'],
+    },
+    UserService,
   ],
 })
 export class UsersModule {}

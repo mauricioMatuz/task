@@ -23,7 +23,5 @@ export class SendGridServiceService {
         },
       },
     );
-
-    console.log('SendGrid response:', response.data);
   }
 }

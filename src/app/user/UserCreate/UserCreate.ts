@@ -1,7 +1,6 @@
 import { RolIdU } from 'src/domain';
+import { Password } from 'src/domain/user/Password';
 import { RolEntityUser } from 'src/domain/user/RolEntity';
-import { TaskEntityUser } from 'src/domain/user/TaskEntityUser';
-import { TaskIdU } from 'src/domain/user/TaskIdU';
 import { UserCreatedAt } from 'src/domain/user/UserCreatedAt';
 import { UserEmail } from 'src/domain/user/UserEmail';
 import { UserId } from 'src/domain/user/UserId';
@@ -18,6 +17,7 @@ export class UserCreate {
     email: string,
     createdAt: Date,
     rolId: number,
+    password: string,
     rol?: RolEntityUser,
     id?: number,
   ): Promise<UserEntity> {
@@ -26,6 +26,7 @@ export class UserCreate {
       new UserEmail(email),
       new UserCreatedAt(createdAt),
       new RolIdU(rolId),
+      new Password(password),
       rol ? new RolEntityUser(rol.value) : null,
       new UserId(id),
     );

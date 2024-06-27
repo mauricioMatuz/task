@@ -10,7 +10,7 @@ export class UserGetOneById {
     const user = await this.repository.getOneById(new UserId(id));
 
     if (!user) throw new UserNotFoundError('User not found'); // retorna 404
-
+    
     return user;
   }
 }

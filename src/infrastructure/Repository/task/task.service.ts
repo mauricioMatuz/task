@@ -7,6 +7,8 @@ import {
   TaskId,
   TaskRepository,
   TaskTitle,
+  TaskUser,
+  TaskUserId,
 } from 'src/domain/task';
 import { TaskEntity } from 'src/infrastructure/Entity/taskEntity';
 import { Repository } from 'typeorm';
@@ -22,6 +24,8 @@ export class TaskService implements TaskRepository {
       new TaskTitle(task.title),
       new TaskDescription(task.description),
       new TaskCreatedAt(task.createdAt),
+      new TaskUserId(task.userId),
+      new TaskUser(task.user),
       new TaskId(task.id),
     );
   }
@@ -29,15 +33,16 @@ export class TaskService implements TaskRepository {
     return await this.respository.save({
       title: task.title.value,
       description: task.description.value,
+      userId: task.userId.value,
       createdAt: task.createdAt.value,
     });
   }
   async getAll(): Promise<Task[]> {
-    const task = await this.respository.find();
+    const task = await this.respository.find({ relations: ['user'] });
     return task.map((taskEntity) => this.mapToDomain(taskEntity));
   }
   async getOneById(id: TaskId): Promise<Task> {
-    const task = await this.respository.findOne({ where: { id: id.value } });
+    const task = await this.respository.findOne({ where: { id: id.value },relations:['user'] });
     if (!task) return null;
     return this.mapToDomain(task);
   }

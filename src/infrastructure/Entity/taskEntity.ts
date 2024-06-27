@@ -1,7 +1,9 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -18,6 +20,9 @@ export class TaskEntity {
   description: string;
   @Column()
   createdAt: Date;
-  @ManyToMany(() => UserEntity, (taskUser) => taskUser.tasks)
-  users: TaskUserEntity[];
+  @Column()
+  userId: number;
+  @ManyToOne(() => UserEntity, (user) => user.tasks)
+  @JoinColumn({ name: 'userId' })
+  user: UserEntity;
 }
