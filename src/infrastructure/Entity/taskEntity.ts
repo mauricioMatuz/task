@@ -2,11 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
-
   ManyToOne,
-
   OneToMany,
-
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from './userEntity';
@@ -24,13 +21,13 @@ export class TaskEntity {
   createdAt: Date;
   @Column()
   userId: number;
-  @Column()
+  @Column({ default: null })
   deadline: Date;
   @Column({ type: 'boolean', default: true })
   active: boolean = true;
   @ManyToOne(() => UserEntity, (user) => user.tasks)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
-  @OneToMany(() => ItemEntity,(items)=>items.task)
+  @OneToMany(() => ItemEntity, (items) => items.task)
   item: ItemEntity[];
 }

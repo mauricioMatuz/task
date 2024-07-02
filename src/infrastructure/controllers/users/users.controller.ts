@@ -75,7 +75,6 @@ export class UsersController {
   @Post()
   async create(@Body() body: Create) {
     try {
-      console.log("SI ENTRO Q ",body);
       const create = await this.userCreate.run(
         body.name,
         body.email,
@@ -87,7 +86,6 @@ export class UsersController {
       return dto;
     } catch (error) {
       if (error instanceof NotFoundException) {
-        console.log("error creating",error);
         throw new NotFoundException({
           status: HttpStatus.BAD_REQUEST,
           error: `Faltan datos ${error}`,

@@ -73,7 +73,7 @@ export class TaskController {
 
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.User)
-  @Get('/my/task')
+  @Get('my/task')
   async myTask(@DecoderToken() params) {
     try {
       const userId = params.sub;
@@ -106,7 +106,6 @@ export class TaskController {
   @Post()
   async create(@Body() body: Create) {
     try {
-      console.log("SI:D");
       const create = await this.taskCreate.run(
         body.title,
         body.description,

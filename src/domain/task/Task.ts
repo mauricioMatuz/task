@@ -21,7 +21,7 @@ export class Task {
     description: TaskDescription,
     createdAt: TaskCreatedAt,
     userId: TaskUserId,
-    deadline:TaskDeadLine,
+    deadline: TaskDeadLine,
     user?: TaskUser,
     id?: TaskId,
     item?: ItemEntiyTask[],
@@ -31,7 +31,7 @@ export class Task {
     this.createdAt = createdAt;
     this.userId = userId;
     this.user = user;
-    this.deadline = deadline
+    this.deadline = deadline;
     this.id = id || null;
     this.item = item || null;
   }
@@ -42,6 +42,7 @@ export class Task {
       title: this.title.value,
       description: this.description.value,
       user: this.user.value,
+      deadline: this.deadline.value,
       item: this.item,
       createAt: this.createdAt.value,
     };

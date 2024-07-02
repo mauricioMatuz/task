@@ -44,6 +44,7 @@ export class TaskService implements TaskRepository {
       title: task.title.value,
       description: task.description.value,
       userId: task.userId.value,
+      deadline: task.deadline.value,
       createdAt: task.createdAt.value,
     });
   }
