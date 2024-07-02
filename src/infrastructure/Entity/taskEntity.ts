@@ -24,6 +24,8 @@ export class TaskEntity {
   createdAt: Date;
   @Column()
   userId: number;
+  @Column()
+  deadline: Date;
   @Column({ type: 'boolean', default: true })
   active: boolean = true;
   @ManyToOne(() => UserEntity, (user) => user.tasks)

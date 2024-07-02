@@ -7,6 +7,7 @@ import {
   TaskId,
   TaskUserId,
   TaskUser,
+  TaskDeadLine,
 } from 'src/domain/task';
 import { TaskEntity } from 'src/infrastructure/Entity/taskEntity';
 import { UserEntity } from 'src/infrastructure/Entity/userEntity';
@@ -19,13 +20,15 @@ export class TaskEdit {
     description: string,
     createdAt: Date,
     userId: number,
-    user:UserEntity
+    deadline: Date,
+    user?: UserEntity,
   ): Promise<TaskEntity> {
     const rolEdit = new Task(
       new TaskTitle(title),
       new TaskDescription(description),
       new TaskCreatedAt(createdAt),
       new TaskId(id),
+      new TaskDeadLine(deadline),
       new TaskUser(user),
       new TaskUserId(userId),
     );

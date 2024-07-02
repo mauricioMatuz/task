@@ -5,6 +5,7 @@ import { TaskUser } from './TaskUser';
 import { TaskUserId } from './TaskUserId';
 import { TaskDescription } from './Tastdescripción';
 import { ItemEntiyTask } from './ItemEntityUser';
+import { TaskDeadLine } from './TaskDeadLine';
 
 export class Task {
   title: TaskTitle;
@@ -13,13 +14,15 @@ export class Task {
   createdAt: TaskCreatedAt;
   userId: TaskUserId;
   user: TaskUser;
+  deadline: TaskDeadLine;
   item: ItemEntiyTask[];
   constructor(
     title: TaskTitle,
     description: TaskDescription,
     createdAt: TaskCreatedAt,
     userId: TaskUserId,
-    user: TaskUser,
+    deadline:TaskDeadLine,
+    user?: TaskUser,
     id?: TaskId,
     item?: ItemEntiyTask[],
   ) {
@@ -28,6 +31,7 @@ export class Task {
     this.createdAt = createdAt;
     this.userId = userId;
     this.user = user;
+    this.deadline = deadline
     this.id = id || null;
     this.item = item || null;
   }

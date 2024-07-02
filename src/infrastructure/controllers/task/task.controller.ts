@@ -105,13 +105,19 @@ export class TaskController {
   @Roles(Role.Admin)
   @Post()
   async create(@Body() body: Create) {
-    const create = await this.taskCreate.run(
-      body.title,
-      body.description,
-      new Date(),
-      body.userId,
-    );
-    return this.mapToDto(create);
+    try {
+      console.log("SI:D");
+      const create = await this.taskCreate.run(
+        body.title,
+        body.description,
+        new Date(),
+        body.userId,
+        body.deadline,
+      );
+      return this.mapToDto(create);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Put(':id')
@@ -124,6 +130,7 @@ export class TaskController {
       body.description,
       new Date(),
       body.userId,
+      body.deadline,
       body.user,
     );
     return this.mapToDto(put);

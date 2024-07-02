@@ -75,6 +75,7 @@ export class UsersController {
   @Post()
   async create(@Body() body: Create) {
     try {
+      console.log("SI ENTRO Q ",body);
       const create = await this.userCreate.run(
         body.name,
         body.email,
@@ -85,8 +86,13 @@ export class UsersController {
       const dto = this.mapToDto(create);
       return dto;
     } catch (error) {
-      if (error instanceof NotFoundException)
-        throw new HttpException('Role not exist', HttpStatus.BAD_REQUEST);
+      if (error instanceof NotFoundException) {
+        console.log("error creating",error);
+        throw new NotFoundException({
+          status: HttpStatus.BAD_REQUEST,
+          error: `Faltan datos ${error}`,
+        });
+      }
       console.log(error, 'erorcito');
     }
   }
@@ -117,8 +123,19 @@ export class UsersController {
     try {
       return await this.userLogin.run(body.email, body.password);
     } catch (error) {
-      if (error instanceof UserNotFoundError) return new NotFoundException();
-      throw error;
+      if (error instanceof UserNotFoundError) {
+        throw new NotFoundException({
+          status: HttpStatus.NOT_FOUND,
+          error: 'Credenciales erroneas',
+        });
+      }
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Something went wrong',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

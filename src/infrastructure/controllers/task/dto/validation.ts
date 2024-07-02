@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsDate, IsNumber, IsString } from 'class-validator';
 import { UserEntity } from 'src/infrastructure/Entity/userEntity';
 
 export class Create {
@@ -8,6 +8,8 @@ export class Create {
   description: string;
   @IsNumber()
   userId: number;
+  @IsDate()
+  deadline: Date;
 }
 
 export class Edit {
@@ -17,5 +19,7 @@ export class Edit {
   description: string;
   @IsNumber()
   userId: number;
-  user:UserEntity
+  @IsDate()
+  deadline: Date;
+  user: UserEntity;
 }

@@ -7,6 +7,7 @@ import {
   TaskTitle,
   TaskUser,
   TaskUserId,
+  TaskDeadLine,
 } from 'src/domain/task';
 import { TaskEntity } from 'src/infrastructure/Entity/taskEntity';
 import { UserEntity } from 'src/infrastructure/Entity/userEntity';
@@ -19,6 +20,7 @@ export class TaskCreate {
     description: string,
     createdAt: Date,
     userId: number,
+    deadline: Date,
     user?: UserEntity,
     id?: number,
   ): Promise<TaskEntity> {
@@ -27,6 +29,7 @@ export class TaskCreate {
       new TaskDescription(description),
       new TaskCreatedAt(createdAt),
       new TaskUserId(userId),
+      new TaskDeadLine(deadline),
       user ? new TaskUser(user) : null,
       new TaskId(id),
     );

@@ -4,6 +4,7 @@ import {
   ItemEntiyTask,
   Task,
   TaskCreatedAt,
+  TaskDeadLine,
   TaskDescription,
   TaskId,
   TaskRepository,
@@ -32,6 +33,7 @@ export class TaskService implements TaskRepository {
       new TaskDescription(task.description),
       new TaskCreatedAt(task.createdAt),
       new TaskUserId(task.userId),
+      new TaskDeadLine(task.deadline),
       new TaskUser(task.user),
       new TaskId(task.id),
       item
