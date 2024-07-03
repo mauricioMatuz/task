@@ -8,6 +8,7 @@ import {
   TaskDescription,
   TaskId,
   TaskRepository,
+  TaskStatus,
   TaskTitle,
   TaskUser,
   TaskUserId,
@@ -23,10 +24,9 @@ export class TaskService implements TaskRepository {
   ) {}
 
   private mapToDomain(task: TaskEntity) {
-    const item = task.item ? task.item.map((item)=>new ItemEntiyTask(item)):[]
-    // const items = taskEntity.item
-    //   ? taskEntity.item.map((item) => new Item(item))
-    //   : []; // Verifica si `item` no es nulo y es un array
+    const item = task.item
+      ? task.item.map((item) => new ItemEntiyTask(item))
+      : [];
 
     return new Task(
       new TaskTitle(task.title),
@@ -34,9 +34,10 @@ export class TaskService implements TaskRepository {
       new TaskCreatedAt(task.createdAt),
       new TaskUserId(task.userId),
       new TaskDeadLine(task.deadline),
+      new TaskStatus(task.active),
       new TaskUser(task.user),
       new TaskId(task.id),
-      item
+      item,
     );
   }
   async create(task: Task): Promise<TaskEntity> {
@@ -45,14 +46,16 @@ export class TaskService implements TaskRepository {
       description: task.description.value,
       userId: task.userId.value,
       deadline: task.deadline.value,
+      active: task.active.value,
       createdAt: task.createdAt.value,
     });
   }
-  async getAll(): Promise<Task[]> {
+  async getAll(active:TaskStatus): Promise<Task[]> {
     const task = await this.respository.find({
-      where: { active: true },
+      where: { active: active.value },
       relations: ['user'],
     });
+    console.log(task," con active: ",active);
     return task.map((taskEntity) => this.mapToDomain(taskEntity));
   }
   async getOneById(id: TaskId): Promise<Task> {

@@ -8,3 +8,4 @@ export * from "./TaskUserId"
 export * from './TaskUser';
 export * from './ItemEntityUser';
 export * from './TaskDeadLine';
+export * from './TaskStatus';

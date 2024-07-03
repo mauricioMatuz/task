@@ -6,6 +6,7 @@ import { TaskUserId } from './TaskUserId';
 import { TaskDescription } from './Tastdescripción';
 import { ItemEntiyTask } from './ItemEntityUser';
 import { TaskDeadLine } from './TaskDeadLine';
+import { TaskStatus } from './TaskStatus';
 
 export class Task {
   title: TaskTitle;
@@ -14,7 +15,7 @@ export class Task {
   createdAt: TaskCreatedAt;
   userId: TaskUserId;
   user: TaskUser;
-  active: boolean=true;
+  active: TaskStatus;
   deadline: TaskDeadLine;
   item: ItemEntiyTask[];
   constructor(
@@ -23,6 +24,7 @@ export class Task {
     createdAt: TaskCreatedAt,
     userId: TaskUserId,
     deadline: TaskDeadLine,
+    active?: TaskStatus,
     user?: TaskUser,
     id?: TaskId,
     item?: ItemEntiyTask[],
@@ -32,8 +34,8 @@ export class Task {
     this.createdAt = createdAt;
     this.userId = userId;
     this.user = user;
-    this.active= this.active
     this.deadline = deadline;
+    this.active = active;
     this.id = id || null;
     this.item = item || null;
   }
@@ -44,8 +46,8 @@ export class Task {
       title: this.title.value,
       description: this.description.value,
       user: this.user.value,
-      active: this.active,
       deadline: this.deadline.value,
+      active: this.active.value,
       item: this.item,
       createAt: this.createdAt.value,
     };

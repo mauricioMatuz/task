@@ -19,7 +19,7 @@ import {
 } from 'src/app/task';
 import { TaskEntity } from 'src/infrastructure/Entity/taskEntity';
 import { TaskResponseDto } from './dto/response';
-import { FindOneParams } from '../users/dto/validation';
+import { Active, FindOneParams } from '../users/dto/validation';
 import { TaskNotFoundError } from 'src/app/task/TaskGetOneById/TaskNotFoundError';
 import { Create, Edit } from './dto/validation';
 import { Role } from '../../../common/enums/role.enum';
@@ -54,9 +54,11 @@ export class TaskController {
   }
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  @Get()
-  async tasks() {
-    return (await this.taskGetAll.run()).map((task) => task.toPlainObject());
+  @Get(':active')
+  async tasks(@Param() active: Active) {
+    return (await this.taskGetAll.run(active.active)).map((task) =>
+      task.toPlainObject(),
+    );
   }
 
   @UseGuards(AuthGuard, RolesGuard)
@@ -112,6 +114,7 @@ export class TaskController {
         new Date(),
         body.userId,
         body.deadline,
+        body.active,
       );
       return this.mapToDto(create);
     } catch (error) {
@@ -130,6 +133,7 @@ export class TaskController {
       new Date(),
       body.userId,
       body.deadline,
+      body.active,
       body.user,
     );
     return this.mapToDto(put);

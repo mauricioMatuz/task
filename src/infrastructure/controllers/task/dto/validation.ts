@@ -1,4 +1,4 @@
-import { IsDate, IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { UserEntity } from 'src/infrastructure/Entity/userEntity';
 
 export class Create {
@@ -14,6 +14,8 @@ export class Create {
   @IsNotEmpty()
   @IsDateString()
   deadline: Date;
+  @IsBoolean()
+  active: boolean;
 }
 
 export class Edit {
@@ -26,5 +28,7 @@ export class Edit {
   @IsNotEmpty()
   @IsDateString()
   deadline: Date;
+  @IsBoolean()
+  active: boolean;
   user: UserEntity;
 }
