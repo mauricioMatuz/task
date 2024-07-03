@@ -14,6 +14,7 @@ export class Task {
   createdAt: TaskCreatedAt;
   userId: TaskUserId;
   user: TaskUser;
+  active: boolean=true;
   deadline: TaskDeadLine;
   item: ItemEntiyTask[];
   constructor(
@@ -31,6 +32,7 @@ export class Task {
     this.createdAt = createdAt;
     this.userId = userId;
     this.user = user;
+    this.active= this.active
     this.deadline = deadline;
     this.id = id || null;
     this.item = item || null;
@@ -42,6 +44,7 @@ export class Task {
       title: this.title.value,
       description: this.description.value,
       user: this.user.value,
+      active: this.active,
       deadline: this.deadline.value,
       item: this.item,
       createAt: this.createdAt.value,
